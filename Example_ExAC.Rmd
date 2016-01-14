@@ -1,0 +1,82 @@
+---
+title: "Example R and PIC-SURE"
+author: "mtm"
+date: "January 7, 2016"
+output: html_document
+---
+This is an example of using the PIC-SURE API with R.
+
+##Required Libraries for communication
+
+```{r}
+library(httr)
+library(jsonlite)
+library(XML)
+```
+
+##Build Base Query Strings for interacting with IRCT
+
+```{r}
+IRCT_REST_BASE_URL <- "http://bd2k-picsure.hms.harvard.edu/"
+
+#REST URL
+IRCT_CL_SERVICE_URL <- paste(IRCT_REST_BASE_URL,"IRCT-CL/rest/",sep="")
+
+#Service URLS
+IRCT_RESOURCE_BASE_URL <- paste(IRCT_CL_SERVICE_URL,"resourceService/",sep="")
+IRCT_QUERY_BASE_URL <- paste(IRCT_CL_SERVICE_URL,"queryRESTService/",sep="")
+IRCT_RESULTS_BASE_URL <- paste(IRCT_CL_SERVICE_URL,"resultService/",sep="")
+
+#List resources
+IRCT_LIST_RESOURCE_URL <- paste(IRCT_RESOURCE_BASE_URL,"resources",sep="")
+
+#Query
+IRCT_START_QUERY_URL <- paste(IRCT_QUERY_BASE_URL,"startQuery",sep="")
+IRCT_WHERE_QUERY_URL <- paste(IRCT_QUERY_BASE_URL,"whereClause",sep="")
+IRCT_RUN_QUERY_URL <- paste(IRCT_QUERY_BASE_URL,"runQuery",sep="")
+
+#Add Select Clause
+IRCT_SELECT_QUERY_URL <- paste(IRCT_QUERY_BASE_URL,"selectClause",sep="")
+
+#Get Results
+IRCT_GET_JSON_RESULTS_URL <- paste(IRCT_RESULTS_BASE_URL,"download/json",sep="")
+```
+
+##Start a conversation
+```{r}
+response <- GET(IRCT_START_QUERY_URL, verbose())
+conversationId <- content(response)$cid
+```
+
+##Add a where clause to filter variant list
+```{r}
+whereParameterList <- list(type="where", 
+                           field="ExAC/gene/variants_in_gene", 
+                           logicalOperator="AND",
+                           predicate="BYQUERY",
+                           "data-query"="CHD8",
+                           cid=conversationId)
+
+response <- GET(IRCT_WHERE_QUERY_URL, query=whereParameterList, verbose())
+clauseId <- content(response)$clauseId
+```
+
+##Run the full query and store the result id
+```{r}
+runQueryList <- list(cid=conversationId)
+response <- GET(IRCT_RUN_QUERY_URL, query=runQueryList, verbose())
+resultId <- content(response)$resultId
+content(response)
+```
+
+##Retrieve Results
+```{r}
+response <- GET(paste(IRCT_GET_JSON_RESULTS_URL,'/',resultId,sep=""), verbose())
+results <- content(response)
+```
+
+##Pivot Results
+```{r}
+results<- data.frame(do.call("rbind", results))
+head(results, n=10)
+```
