@@ -61,10 +61,31 @@ response <- GET(IRCT_WHERE_QUERY_URL, query=whereParameterList, verbose())
 content(response)
 ```
 
-##Add a select clause
+##Add select clauses
 ```{r}
 selectParameterList <- list(type="select", 
                             field="NHANES Public/Public Studies///NHANES/NHANES/demographics/AGE/",
+                            alias="AGE",
+                            cid=conversationId)
+response <- GET(IRCT_SELECT_QUERY_URL, query=selectParameterList, verbose())
+content(response)
+
+selectParameterList <- list(type="select", 
+                            field="NHANES Public/Public Studies///NHANES/NHANES/demographics/RACE/",
+                            alias="AGE",
+                            cid=conversationId)
+response <- GET(IRCT_SELECT_QUERY_URL, query=selectParameterList, verbose())
+content(response)
+
+selectParameterList <- list(type="select", 
+                            field="NHANES Public/Public Studies///NHANES/NHANES/examination/blood pressure/mean diastolic/",
+                            alias="AGE",
+                            cid=conversationId)
+response <- GET(IRCT_SELECT_QUERY_URL, query=selectParameterList, verbose())
+content(response)
+
+selectParameterList <- list(type="select", 
+                            field="NHANES Public/Public Studies///NHANES/NHANES/examination/blood pressure/mean systolic/",
                             alias="AGE",
                             cid=conversationId)
 response <- GET(IRCT_SELECT_QUERY_URL, query=selectParameterList, verbose())

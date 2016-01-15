@@ -128,8 +128,8 @@ content(response)</code></pre>
 ## $clauseId
 ## [1] 0</code></pre>
 </div>
-<div id="add-a-select-clause" class="section level2">
-<h2>Add a select clause</h2>
+<div id="add-select-clauses" class="section level2">
+<h2>Add select clauses</h2>
 <pre class="r"><code>selectParameterList &lt;- list(type=&quot;select&quot;, 
                             field=&quot;NHANES Public/Public Studies///NHANES/NHANES/demographics/AGE/&quot;,
                             alias=&quot;AGE&quot;,
@@ -141,6 +141,39 @@ content(response)</code></pre>
 ## 
 ## $clauseId
 ## [1] 1</code></pre>
+<pre class="r"><code>selectParameterList &lt;- list(type=&quot;select&quot;, 
+                            field=&quot;NHANES Public/Public Studies///NHANES/NHANES/demographics/RACE/&quot;,
+                            alias=&quot;AGE&quot;,
+                            cid=conversationId)
+response &lt;- GET(IRCT_SELECT_QUERY_URL, query=selectParameterList, verbose())
+content(response)</code></pre>
+<pre><code>## $status
+## [1] &quot;OK&quot;
+## 
+## $clauseId
+## [1] 2</code></pre>
+<pre class="r"><code>selectParameterList &lt;- list(type=&quot;select&quot;, 
+                            field=&quot;NHANES Public/Public Studies///NHANES/NHANES/examination/blood pressure/mean diastolic/&quot;,
+                            alias=&quot;AGE&quot;,
+                            cid=conversationId)
+response &lt;- GET(IRCT_SELECT_QUERY_URL, query=selectParameterList, verbose())
+content(response)</code></pre>
+<pre><code>## $status
+## [1] &quot;OK&quot;
+## 
+## $clauseId
+## [1] 3</code></pre>
+<pre class="r"><code>selectParameterList &lt;- list(type=&quot;select&quot;, 
+                            field=&quot;NHANES Public/Public Studies///NHANES/NHANES/examination/blood pressure/mean systolic/&quot;,
+                            alias=&quot;AGE&quot;,
+                            cid=conversationId)
+response &lt;- GET(IRCT_SELECT_QUERY_URL, query=selectParameterList, verbose())
+content(response)</code></pre>
+<pre><code>## $status
+## [1] &quot;OK&quot;
+## 
+## $clauseId
+## [1] 4</code></pre>
 </div>
 <div id="run-the-full-query-and-store-the-result-id" class="section level2">
 <h2>Run the full query and store the result id</h2>
@@ -149,7 +182,7 @@ response &lt;- GET(IRCT_RUN_QUERY_URL, query=runQueryList, verbose())
 resultId &lt;- content(response)$resultId
 content(response)</code></pre>
 <pre><code>## $resultId
-## [1] 138</code></pre>
+## [1] 149</code></pre>
 </div>
 <div id="retrieve-results" class="section level2">
 <h2>Retrieve Results</h2>
@@ -160,17 +193,39 @@ results &lt;- content(response)</code></pre>
 <h2>Pivot Results</h2>
 <pre class="r"><code>results&lt;- data.frame(do.call(&quot;rbind&quot;, results))
 head(results, n=10)</code></pre>
-<pre><code>##    X.NHANES.demographics.AGE. PATIENT_NUM
-## 1                          39      481534
-## 2                          34      481537
-## 3                          11      481531
-## 4                          55      481532
-## 5                          85      452978
-## 6                          66      452977
-## 7                          16      452979
-## 8                          22      452972
-## 9                          16      452971
-## 10                         14      452976</code></pre>
+<pre><code>##    X.NHANES.demographics.RACE.white. X.NHANES.demographics.AGE.
+## 1                              white                         39
+## 2                              white                         34
+## 3                              white                         11
+## 4                              white                         55
+## 5                              white                         85
+## 6                              white                         66
+## 7                              white                         16
+## 8                              white                         22
+## 9                              white                         16
+## 10                             white                         14
+##    X.NHANES.examination.blood.pressure.mean.systolic.
+## 1                                                 130
+## 2                                           108.66667
+## 3                                            96.66667
+## 4                                                 128
+## 5                                                    
+## 6                                                    
+## 7                                                 100
+## 8                                           101.33333
+## 9                                                  88
+## 10                                          117.33333
+##    X.NHANES.examination.blood.pressure.mean.diastolic. PATIENT_NUM
+## 1                                             79.33333      481534
+## 2                                             75.33333      481537
+## 3                                             44.66667      481531
+## 4                                             78.66667      481532
+## 5                                                           452978
+## 6                                                           452977
+## 7                                             73.33333      452979
+## 8                                             51.33333      452972
+## 9                                                   59      452971
+## 10                                            41.33333      452976</code></pre>
 </div>
 
 
