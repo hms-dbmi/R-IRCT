@@ -4,7 +4,7 @@ author: "mtm"
 date: "January 7, 2016"
 output: html_document
 ---
-This is an example of using the BD2K PIC-SURE RESTful API and R Usage with R.
+This is an example of using the BD2K PIC-SURE RESTful API with R.
 
 ##Required Libraries for communication
 
